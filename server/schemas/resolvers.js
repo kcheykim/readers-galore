@@ -38,6 +38,16 @@ const resolvers = {
                 return updateBook;
             }
             throw new AuthenticationError('Please Log In.');
+        },
+        removeBook: async (parent, args, context) => {
+            if(context.user) {
+                const userData = await User.create({ ...args, username: context.user.username });
+                await User.findByIdAndDelete(
+                    { _id: context.user._id},
+                    { $pull: { saveBook: bookId}},
+                    { new: true });
+                return userData;
+            }
         }
     }
 
