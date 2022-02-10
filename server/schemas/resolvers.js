@@ -28,15 +28,24 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
-        
+        saveBook: async (parent, args, context) => {
+            if(context.user) {
+                const updateBook = await User.create({ ...args, username: context.user.username });
+                await User.findByIdAndUpdate(
+                    { _id: context.user._id},
+                    { $push: { saveBook: book}},
+                    { new: true });
+                return updateBook;
+            }
+            throw new AuthenticationError('Please Log In.');
+        }
     }
 
 };
 
 module.exports = resolvers;
 
-// module.exports = {
-//   // get a single user by either their id or their username
+
 //   async getSingleUser({ user = null, params }, res) {
 //     const foundUser = await User.findOne({
 //       $or: [{ _id: user ? user._id : params.id }, { username: params.username }],
