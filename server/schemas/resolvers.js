@@ -3,6 +3,33 @@ const { User} = require('../models'); //import User model
 const { signToken } = require('../utils/auth'); //import sign token form auth
 
 const resolvers = {
+    Query: {
+        me: async (parent, args, context) => {
+            if(context.user) {
+                const userData = await User.findOne({_id: context.user._id})
+                .select('-__v -password')
+                .populate('saveBook');
+                return userData;
+            }
+            throw new AuthenticationError('Not logged in');
+        }
+    },
+    Mutation: {
+        loginUser: async (parent, {email, password}) => {
+            const user = await User.findOne({ email });
+            if(!user) { throw new AuthenticationError('User Not Found'); }
+            const matchPw = await user.isCorrectPasword(password);
+            if(!matchPw) { throw new AuthenticationError('Incorrect Password'); }
+            const toke = signToken(user);
+            return { token, user };
+        },
+        addUser: async (parent, args) => {
+            const user = await User.create(args);
+            const token = signToken(user);
+            return { token, user };
+        },
+        
+    }
 
 };
 
