@@ -20,7 +20,7 @@ const resolvers = {
             if(!user) { throw new AuthenticationError('User Not Found'); }
             const matchPw = await user.isCorrectPassword(password);
             if(!matchPw) { throw new AuthenticationError('Incorrect Password'); }
-            const toke = signToken(user);
+            const token = signToken(user);
             return { token, user };
         },
         addUser: async (parent, args) => { //add the a user (signup)
