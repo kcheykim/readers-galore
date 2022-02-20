@@ -6,39 +6,50 @@ import { REMOVE_BOOK } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
-const SavedBooks = () => { 
+const SavedBooks = () => {
 
-  const {loading, data} = useQuery(GET_ME);
+  const { loading, data } = useQuery(GET_ME);
   const userData = data?.me || {};
+  const [removeBook, { error }] = useMutation(REMOVE_BOOK);
 
-  if(load) {
+  if (loading) {
     return <div>Loading...</div>
   }
   //const [userData, setUserData] = useState({});
 
-  userData = getMe
-  const userDataLength = Object.keys(userData).length; //check if useffect hook need re-run
+  // userData = getMe
+  // const userDataLength = Object.keys(userData).length; //check if useffect hook need re-run
 
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const token = Auth.loggedIn() ? Auth.getToken() : null;
-        if (!token) { return false; }
-        const response = await GET_ME(token);
-        if (!response.ok) { throw new Error('something went wrong!'); }
-        const user = await response.json();
-        setUserData(user);
-      } catch (err) { console.error(err); }
-    };
-    getUserData();
-  }, [userDataLength]);
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     try {
+  //       const token = Auth.loggedIn() ? Auth.getToken() : null;
+  //       if (!token) { return false; }
+  //       const response = await GET_ME(token);
+  //       if (!response.ok) { throw new Error('something went wrong!'); }
+  //       const user = await response.json();
+  //       setUserData(user);
+  //     } catch (err) { console.error(err); }
+  //   };
+  //   getUserData();
+  // }, [userDataLength]);
+
+
 
   const handleDeleteBook = async (bookId) => { //accepts book's mongo _id and deletes the book
     const token = Auth.loggedIn() ? Auth.getToken() : null;
     if (!token) { return false; }
 
     try {
-      const response = await REMOVE_BOOK(bookId, token);
+     // const response = await REMOVE_BOOK(bookId, token);
+      // const { loading, data } = useQuery(QUERY_USER, {
+      //   variables: { username: userParam }
+      // });
+
+      // const { data } = await addUser({ variables: { ...userFormData } });
+
+      const { data } = await removeBook({ variables: { bookId } });
+
 
       if (!response.ok) {
         throw new Error('something went wrong!');
