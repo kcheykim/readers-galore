@@ -32,7 +32,7 @@ const LoginForm = () => {
       const { data } = await loginUser({ variables: { ...userFormData } });
       Auth.login(data.loginUser.token) //token given to loginUser
     } catch (err) { console.error(err); }
-    setUserFormData({ username: '', email: '', password: '', });
+    setUserFormData({ username: '', email: '', password: '' }); //set values to empty
   };
 
   return (
