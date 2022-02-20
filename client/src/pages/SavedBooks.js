@@ -13,7 +13,7 @@ const SavedBooks = () => {
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
 
   if (loading) {
-    return <div>Wait, Loading...</div>
+    return <h2>Wait, Loading...</h2>
   }
 
   const handleDeleteBook = async (bookId) => { //accepts book's mongo _id and deletes the book
@@ -24,18 +24,18 @@ const SavedBooks = () => {
       const { data } = await removeBook({ variables: { bookId } }); //remove the book
 
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
 
-      const updatedUser = await response.json();
-      setUserData(updatedUser);
+      // const updatedUser = await response.json();
+      // setUserData(updatedUser);
       removeBookId(bookId); //remove book's id from localStorage
     } catch (err) { console.error(err); }
   };
 
   // if data isn't here yet, say so
-  if (!userDataLength) { return <h2>WAIT, LOADING...</h2>; } //msg to wait while loading
+  // if (!userDataLength) { return <h2>WAIT, LOADING...</h2>; } //msg to wait while loading
 
   return (
     <>
