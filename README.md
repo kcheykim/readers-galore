@@ -29,8 +29,8 @@ Ensure that you have mongoDB by running `mongod` at the command prompt. <br />
 
 ## Usage
 Here are the images and links of the pages: <br />
-![cheykim-porfolio](/src/assets/images/cheykim-portfolio.png?raw=true)<br />
-https://kcheykim.github.io/cheykim-portfolio/
+![readers-galore](./public/assets/images/readers-galore.png?raw=true)<br />
+https://thawing-eyrie-10185.herokuapp.com/
 
 ## Credits
 Here are the list of collaborators:  
