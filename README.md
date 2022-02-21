@@ -29,7 +29,7 @@ Ensure that you have mongoDB by running `mongod` at the command prompt. <br />
 
 ## Usage
 Here are the images and links of the pages: <br />
-![readers-galore](./public/assets/images/readers-galore.png?raw=true)<br />
+![readers-galore](/client/public/assets/images/readers-galore.png?raw=true)<br />
 https://thawing-eyrie-10185.herokuapp.com/
 
 ## Credits
