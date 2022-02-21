@@ -8,11 +8,10 @@ const resolvers = {
             if(context.user) {
                 const userData = await User.findOne({_id: context.user._id})
                 .select('-__v -password')
-                .populate('saveBook');
                 return userData;
             }
             throw new AuthenticationError('Not logged in');
-        }
+        },
     },
     Mutation: {
         loginUser: async (parent, {email, password}) => { //authenticate a user to login
@@ -28,27 +27,27 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
-        saveBook: async (parent, { book }, context) => {
+        saveBook: async (parent, { bookData }, context) => {
             if(context.user) {
-                const updateBook = await User.findByIdAndUpdate(
-                    { _id: context.user._id},
-                    { $push: { savedBooks: book }},
+                const updateUser = await User.findByIdAndUpdate(
+                    { _id: context.user._id },
+                    { $push: { savedBooks: bookData }},
                     { new: true });
-                return updateBook;
+                return updateUser;
             }
             throw new AuthenticationError('Please Log In.');
         },
         removeBook: async (parent, { bookId }, context) => {
             if(context.user) {
-                const userData = await User.findByIdAndDelete(
+                const updateUser = await User.findByIdAndDelete(
                     { _id: context.user._id},
-                    { $pull: { savedBooks: bookId}},
+                    { $pull: { savedBooks: {bookId}}},
                     { new: true });
-                return userData;
+                return updateUser;
             }
+            throw new AuthenticationError('Please Log In.');
         }
     }
-
 };
 
 module.exports = resolvers;

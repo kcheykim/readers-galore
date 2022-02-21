@@ -11,31 +11,20 @@ const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME); //useQuery Hook exe. GET_ME to save+load userData
   const userData = data?.me || {};
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
-
-  if (loading) {
-    return <h2>Wait, Loading...</h2>
-  }
-
   const handleDeleteBook = async (bookId) => { //accepts book's mongo _id and deletes the book
     const token = Auth.loggedIn() ? Auth.getToken() : null; //check for login token
     if (!token) { return false; }
-
     try {
-      const { data } = await removeBook({ variables: { bookId } }); //remove the book
-
-
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
-
-      // const updatedUser = await response.json();
-      // setUserData(updatedUser);
+      const { data } = await removeBook({ variables: { bookId }, }); //remove the book
+      console.log(data)
+      if (error) { throw new Error('something went wrong!'); }
       removeBookId(bookId); //remove book's id from localStorage
     } catch (err) { console.error(err); }
   };
 
-  // if data isn't here yet, say so
-  // if (!userDataLength) { return <h2>WAIT, LOADING...</h2>; } //msg to wait while loading
+  if (loading) {
+    return <h2>Wait, Loading...</h2>
+  }
 
   return (
     <>
@@ -71,5 +60,5 @@ const SavedBooks = () => {
     </>
   );
 };
-
 export default SavedBooks;
+
