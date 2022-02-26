@@ -10,6 +10,7 @@ const SavedBooks = () => {
 
   const { loading, data } = useQuery(GET_ME); //useQuery Hook exe. GET_ME to save+load userData
   const userData = data?.me || {};
+ // console.log(userData);
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
   const handleDeleteBook = async (bookId) => { //accepts book's mongo _id and deletes the book
     const token = Auth.loggedIn() ? Auth.getToken() : null; //check for login token
@@ -35,6 +36,7 @@ const SavedBooks = () => {
       </Jumbotron>
       <Container>
         <h2>
+          {console.log(userData)}
           {userData.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}

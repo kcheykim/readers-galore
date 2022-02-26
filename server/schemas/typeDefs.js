@@ -29,10 +29,10 @@ const typeDefs = gql`
   }
 
   input acceptBook {
-    authors: [String]
-    description: String!
     bookId: String!
-    title: String!
+    authors: [String]
+    description: String
+    title: String
     image: String
     link: String
   }

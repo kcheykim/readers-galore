@@ -21,16 +21,16 @@ const SearchBooks = () => {
     event.preventDefault();
     if (!searchInput) { return false; }
     try {
-      const response = await searchGoogleBooks(searchInput);
-      //const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`);
-      if (error) { throw new Error('Something went wrong!'); }
+      const response = await searchGoogleBooks(searchInput); //calling the fetch function
+    
       const { items } = await response.json();
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ['No author to display'],
-        title: book.volumeInfo.title,
-        description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
+        description: book.volumeInfo.description,
+        title: book.volumeInfo.title,
+        link: book.volumeInfo.link,
       }));
 
       setSearchedBooks(bookData);
@@ -40,19 +40,18 @@ const SearchBooks = () => {
 
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId) => {
+    console.log(bookId)
     // find the book in `searchedBooks` state by the matching id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
+    console.log(bookToSave);
     const token = Auth.loggedIn() ? Auth.getToken() : null; //get token
     if (!token) { return false; }
     try {
-
-      //const response = await saveBook(bookToSave, token);
-      const { data } = await saveBook({ variables: { bookData: { ...bookToSave } }, });
-      console.log({data});
-
-      if (error) { throw new Error('Something went wrong!'); }
+      const { data } = await saveBook({ variables: { bookData: { ...bookToSave } } });
+      console.log(data);
+      // if (error) { throw new Error('Something went wrong!'); }
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);  //saves to user's account, save book id to state
-    } catch (e) { console.error(e); }
+    } catch (e) { console.log('We have an error'); }
   };
 
   return (
@@ -101,12 +100,12 @@ const SearchBooks = () => {
                   <Card.Text>{book.description}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
-                      disabled={savedBookIds?.some((savedID) => savedID === book.bookId)}
+                      disabled={savedBookIds?.some((savedId) => savedId === book.bookId)}
                       className='btn-block btn-info'
                       onClick={() => handleSaveBook(book.bookId)}>
-                      {savedBookIds?.some((savedID) => savedID === book.bookId)
+                      {savedBookIds?.some((savedId) => savedId === book.bookId)
                         ? 'This book has already been saved!'
-                        : 'Save this Book!'}
+                        : 'Click to save this Book!'}
                     </Button>
                   )}
                 </Card.Body>
